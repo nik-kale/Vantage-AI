@@ -1,7 +1,7 @@
 {
   "name": "vantage-ai",
   "private": true,
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Vantage AI – Real-time, in-browser UX intelligence and guidance framework.",
   "workspaces": [
     "packages/*",

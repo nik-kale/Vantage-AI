@@ -1,0 +1,22 @@
+{
+  "name": "@vantage-ai/vue",
+  "version": "3.0.0",
+  "description": "Vue 3 composables for Vantage AI",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0",
+    "@vantage-ai/sdk": "^3.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "vitest": "^1.0.0",
+    "vue": "^3.4.0"
+  }
+}

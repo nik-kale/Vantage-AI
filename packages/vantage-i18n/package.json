@@ -1,0 +1,17 @@
+{
+  "name": "@vantage-ai/i18n",
+  "version": "3.0.0",
+  "description": "Internationalization support for Vantage AI",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "vitest": "^1.0.0"
+  }
+}

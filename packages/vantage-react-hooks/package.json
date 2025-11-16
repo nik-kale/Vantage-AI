@@ -1,7 +1,7 @@
 {
-  "name": "@vantage-ai/widgets",
+  "name": "@vantage-ai/react-hooks",
   "version": "3.0.0",
-  "description": "React UI components for Vantage AI guidance",
+  "description": "React hooks for Vantage AI",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -12,15 +12,11 @@
   },
   "peerDependencies": {
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
-  },
-  "dependencies": {
-    "@vantage-ai/sdk": "3.0.0"
+    "@vantage-ai/sdk": "^3.0.0"
   },
   "devDependencies": {
     "typescript": "^5.5.0",
     "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0",
     "vitest": "^1.0.0"
   }
 }

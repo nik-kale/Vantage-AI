@@ -1,0 +1,28 @@
+{
+  "name": "@vantage-ai/analytics",
+  "version": "3.0.0",
+  "description": "Analytics integrations for Vantage AI",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vantage-ai/sdk": "^3.0.0"
+  },
+  "peerDependencies": {
+    "@amplitude/analytics-browser": "^2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@amplitude/analytics-browser": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "vitest": "^1.0.0"
+  }
+}
