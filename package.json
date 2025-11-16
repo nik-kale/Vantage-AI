@@ -1,7 +1,7 @@
 {
   "name": "vantage-ai",
   "private": true,
-  "version": "0.1.0",
+  "version": "2.0.0",
   "description": "Vantage AI – Real-time, in-browser UX intelligence and guidance framework.",
   "workspaces": [
     "packages/*",
@@ -11,7 +11,8 @@
     "build": "pnpm -r run build",
     "dev": "pnpm -C examples/ecommerce-demo dev",
     "lint": "pnpm -r run lint",
-    "test": "pnpm -r run test"
+    "test": "pnpm -r run test",
+    "test:watch": "pnpm -r run test:watch"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,8 @@
     "typescript": "^5.5.0",
     "eslint": "^9.0.0",
     "@typescript-eslint/parser": "^8.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.0"
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "vitest": "^1.0.0",
+    "prettier": "^3.0.0"
   }
 }

@@ -1,16 +1,49 @@
 {
   "name": "@vantage-ai/sdk",
-  "version": "0.1.0",
+  "version": "2.0.0",
+  "description": "Core browser instrumentation SDK for Vantage AI",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint src --ext .ts,.tsx",
-    "test": "echo \"TODO: add tests\""
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
+  "keywords": [
+    "ux",
+    "analytics",
+    "user-experience",
+    "friction-detection",
+    "guidance"
+  ],
   "dependencies": {},
   "devDependencies": {
-    "typescript": "^5.5.0"
+    "typescript": "^5.5.0",
+    "vitest": "^1.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./security/sanitizer": {
+      "types": "./dist/security/sanitizer.d.ts",
+      "import": "./dist/security/sanitizer.mjs",
+      "require": "./dist/security/sanitizer.js"
+    },
+    "./utils/performance": {
+      "types": "./dist/utils/performance.d.ts",
+      "import": "./dist/utils/performance.mjs",
+      "require": "./dist/utils/performance.js"
+    },
+    "./utils/storage": {
+      "types": "./dist/utils/storage.d.ts",
+      "import": "./dist/utils/storage.mjs",
+      "require": "./dist/utils/storage.js"
+    }
   }
 }
