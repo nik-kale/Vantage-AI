@@ -1,0 +1,22 @@
+{
+  "name": "vantage-ecommerce-demo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "@vantage-ai/sdk": "0.1.0",
+    "@vantage-ai/widgets": "0.1.0",
+    "@vantage-ai/playbooks": "0.1.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "typescript": "^5.5.0"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "vantage-ai",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Vantage AI – Real-time, in-browser UX intelligence and guidance framework.",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r run build",
+    "dev": "pnpm -C examples/ecommerce-demo dev",
+    "lint": "pnpm -r run lint",
+    "test": "pnpm -r run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nik-kale/vantage-ai.git"
+  },
+  "license": "MIT",
+  "author": "Vantage AI Contributors",
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "eslint": "^9.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0"
+  }
+}

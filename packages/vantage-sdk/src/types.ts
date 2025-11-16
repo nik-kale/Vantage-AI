@@ -1,0 +1,44 @@
+export type VantageMode = "lite" | "ai";
+
+export interface VantageConfig {
+  mode: VantageMode;
+  playbooks?: Playbook[];
+  onTrigger?: (recommendation: Recommendation) => void;
+}
+
+export interface EventContext {
+  route: string;
+  timestamp: number;
+  eventType: string;
+  details: Record<string, unknown>;
+}
+
+export interface SuspicionSignal {
+  id: string;
+  score: number; // 0–1
+  category: "friction" | "error" | "confusion";
+  context: EventContext[];
+}
+
+export interface PlaybookMatchCondition {
+  categories?: ("friction" | "error" | "confusion")[];
+  minScore?: number;
+  routePattern?: string;
+  containsText?: string[];
+}
+
+export interface Recommendation {
+  id: string;
+  title: string;
+  message: string;
+  severity: "info" | "warning" | "critical";
+  link?: string;
+  widget?: "banner" | "tooltip" | "checklist";
+}
+
+export interface Playbook {
+  id: string;
+  description?: string;
+  match: PlaybookMatchCondition;
+  recommendation: Recommendation;
+}
