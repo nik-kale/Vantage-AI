@@ -5,6 +5,100 @@ All notable changes to Vantage AI will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.0.0] - 2025-01-17
+
+### Added
+
+#### New Packages
+- **Angular Support** (`@vantage-ai/angular`): Complete Angular integration
+  - VantageService: Core SDK integration with RxJS observables (isActive$, recommendations$, error$)
+  - RecommendationService: Recommendation history, filtering by type/priority
+  - AnalyticsService: Event tracking (track, pageView, action, conversion, error)
+  - PlaybookService: Dynamic playbook loading and management
+  - VantageTrackDirective: Automatic event tracking via `[vantageTrack]`
+  - VantageTargetDirective: Mark elements as guidance targets via `[vantageTarget]`
+  - 3 Filter Pipes: vantageFilterByType, vantageFilterByPriority, vantageSortByPriority
+  - VantageModule.forRoot(): Easy module setup
+  - Full Angular 14-18 support with standalone components
+
+- **React Native Mobile SDK** (`@vantage-ai/react-native`): Mobile analytics with session replay
+  - MobileSessionManager: Complete session tracking with start/end times
+  - Screen view tracking with automatic duration calculation
+  - Touch event tracking (press, long-press, swipe) for heatmap generation
+  - Crash reporting with automatic error handlers
+  - Device information collection (platform, OS, screen size, locale)
+  - App state monitoring (background/foreground transitions)
+  - Session export as JSON
+  - useVantageMobile() React hook
+  - withVantageTracking() HOC for automatic screen tracking
+  - Configurable privacy controls and sampling rates
+  - Maximum session duration limits (default 30 minutes)
+
+- **Cohort Analysis** (`@vantage-ai/cohorts`): Advanced user segmentation and retention tracking
+  - CohortManager: Central cohort management system
+  - 4 Cohort Types:
+    - Acquisition: Users who joined in a specific date range
+    - Behavioral: Users who performed specific actions (with count and time windows)
+    - Demographic: Users with specific properties
+    - RFM: Recency, Frequency, Monetary value segmentation
+  - Retention tracking with daily/weekly/monthly periods
+  - RFM Analysis with 11 pre-defined segments:
+    - Champions, Loyal Customers, Potential Loyalists, New Customers
+    - Promising, Needs Attention, About to Sleep, At Risk
+    - Can't Lose Them, Hibernating, Lost
+  - Cohort metrics: Total users, active users, churn rate, avg LTV
+  - Retention curves with period labels and drop-off rates
+  - Cohort comparison (side-by-side analysis)
+  - CSV export for cohort metrics
+  - Custom matcher functions for flexible criteria
+  - User event tracking within cohorts
+  - Automatic cohort re-evaluation on user changes
+
+- **Custom Analytics Dashboards** (`@vantage-ai/dashboards`): Build beautiful, interactive dashboards
+  - Dashboard component with flexible grid layout
+  - 7 Widget Types:
+    - Metric Cards: KPIs with trend indicators (up/down/neutral)
+    - Line Charts: Time series data visualization
+    - Bar Charts: Comparison visualizations
+    - Pie Charts: Distribution visualizations
+    - Area Charts: Filled trend visualizations
+    - Data Tables: Tabular data with formatting
+    - Funnel Visualizations: Conversion funnel rendering
+  - Grid-based positioning system (row, col, width, height)
+  - Auto-refresh with configurable intervals
+  - SVG-based charts for lightweight, responsive rendering
+  - Customizable color schemes
+  - Value formatting: number, percentage, currency, duration
+  - Async data sources (static data or Promise-returning functions)
+  - Widget loading states
+  - Manual refresh button
+
+### Enhanced
+
+#### Framework Coverage
+- Now supporting 6 platforms: React, Vue 3, Svelte, Angular, React Native, Vanilla JS
+- Consistent API across all framework integrations
+- Universal framework-agnostic core SDK
+
+#### Developer Experience
+- Angular developers get first-class support with services and directives
+- Mobile developers get native React Native SDK
+- Data analysts get powerful cohort analysis and RFM segmentation
+- Product managers get beautiful custom dashboards
+
+### Documentation
+- Added comprehensive V6-IMPLEMENTATION-SUMMARY.md with 600+ lines
+- Updated README.md to Enterprise Analytics Platform
+- Complete usage examples for all new packages
+- Competitive analysis and positioning
+- v7.0 roadmap
+
+### Competitive Positioning
+- Only open-source UX intelligence platform with complete framework coverage
+- Only platform with mobile SDK, cohorts, RFM, and custom dashboards
+- Privacy-first architecture with client-side processing
+- Zero vendor lock-in with full data export capabilities
+
 ## [5.0.0] - 2025-01-17
 
 ### Added

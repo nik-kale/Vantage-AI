@@ -1,0 +1,40 @@
+{
+  "name": "@vantage-ai/dashboards",
+  "version": "6.0.0",
+  "description": "Custom analytics dashboards with visualizations for Vantage AI",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest"
+  },
+  "keywords": [
+    "dashboard",
+    "analytics",
+    "visualization",
+    "charts",
+    "vantage-ai"
+  ],
+  "author": "Vantage AI",
+  "license": "MIT",
+  "dependencies": {
+    "@vantage-ai/sdk": "workspace:*",
+    "@vantage-ai/cohorts": "workspace:*",
+    "@vantage-ai/funnels": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  }
+}

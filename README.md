@@ -1,6 +1,6 @@
-# Vantage AI v5.0
+# Vantage AI v6.0
 
-### Complete UX Intelligence Platform: Real-Time Guidance, Session Replay, Heatmaps, Funnel Analysis & User Feedback
+### Enterprise Analytics Platform: Real-Time Guidance, Mobile SDK, Cohort Analysis, Custom Dashboards & Complete Framework Coverage
 
 **Vantage AI** is a **production-ready, enterprise-grade browser-native framework** that helps your users when they actually need help.
 
@@ -19,55 +19,59 @@ All in **real time**, with **enterprise-grade security**, **framework support**,
 
 ---
 
-## 🚀 What's New in v4.0
+## 🚀 What's New in v6.0
 
-### 🎬 Session Replay (Privacy-First)
-- ✅ **DOM snapshot & mutation recording**
-- ✅ **Mouse tracking, scrolling, network events**
-- ✅ **Automatic PII filtering** (emails, phones, SSNs, credit cards)
-- ✅ **Password/sensitive data masking**
-- ✅ **Privacy levels:** strict | balanced | permissive
-- ✅ **Session playback** with speed control
-- ✅ **Export sessions** as JSON
+### 🎯 Complete Framework Coverage
+- ✅ **Angular Support** - Services, directives, pipes with RxJS
+- ✅ **React Native SDK** - Mobile analytics with session replay
+- ✅ **React Hooks** - useVantage, useVantageMobile
+- ✅ **Vue 3 Composables** - Reactive state management
+- ✅ **Svelte Stores** - Full reactive integration
+- ✅ **Vanilla JS** - Core SDK for any framework
 
-### 🔥 Heatmaps (5 Types)
-- ✅ **Click Heatmap** - Where users click
-- ✅ **Scroll Heatmap** - Scroll depth visualization
-- ✅ **Attention Heatmap** - Where users pause/hover
-- ✅ **Rage Click Heatmap** - Frustration points
-- ✅ **Dead Click Heatmap** - Clicks with no effect
-- ✅ **Canvas-based rendering** with 3 color schemes
-- ✅ **Export/import** heatmap data
+### 📱 Mobile SDK (React Native)
+- ✅ **Session Tracking** - Complete user sessions with screen views
+- ✅ **Touch Heatmaps** - Track user touches for analysis
+- ✅ **Crash Reporting** - Automatic error and crash tracking
+- ✅ **Device Info** - Platform, OS, screen dimensions
+- ✅ **App State Monitoring** - Background/foreground transitions
+- ✅ **Session Export** - Export sessions as JSON
+- ✅ **Privacy Controls** - Configurable sampling rates
 
-### 📊 Funnel Analysis
-- ✅ **Multi-step conversion tracking**
-- ✅ **Drop-off analysis** at each step
-- ✅ **Time-to-convert metrics**
-- ✅ **Visual funnel renderer**
-- ✅ **Conversion window** tracking
+### 📊 Cohort Analysis & RFM Segmentation
+- ✅ **4 Cohort Types** - Acquisition, Behavioral, Demographic, RFM
+- ✅ **Retention Tracking** - Daily, weekly, monthly retention curves
+- ✅ **RFM Analysis** - 11 pre-defined segments (Champions, Loyal, At Risk, etc.)
+- ✅ **Cohort Metrics** - Total users, active users, churn rate, LTV
+- ✅ **Cohort Comparison** - Side-by-side analysis
+- ✅ **CSV Export** - Export data for further analysis
 
-### 🚩 Feature Flags
-- ✅ **Percentage-based rollout**
-- ✅ **User segment targeting**
-- ✅ **Environment-specific** flags
-- ✅ **Time-limited features**
-- ✅ **Local overrides** for testing
+### 📈 Custom Analytics Dashboards
+- ✅ **7 Widget Types** - Metrics, Line/Bar/Pie/Area charts, Tables, Funnels
+- ✅ **Flexible Layout** - Grid-based positioning system
+- ✅ **Auto-Refresh** - Configurable refresh intervals
+- ✅ **SVG Charts** - Lightweight, responsive visualizations
+- ✅ **Value Formatting** - Number, percentage, currency, duration
+- ✅ **Async Data Sources** - Load data from any source
 
-### 📈 Enhanced Analytics (6 Platforms)
-- ✅ Amplitude
-- ✅ Segment
-- ✅ Google Analytics 4
-- ✅ **NEW: Mixpanel**
-- ✅ **NEW: Heap**
-- ✅ **NEW: PostHog**
+### From v5.0
+- ✅ **Survey Widget** - 5 question types (Rating, NPS, Multiple Choice, Text, Yes/No)
+- ✅ **FeedbackButton** - Floating feedback collection
+- ✅ **Svelte Support** - 5 reactive stores
+
+### From v4.0
+- ✅ **Session Replay** - Privacy-first DOM recording with PII filtering
+- ✅ **Heatmaps** - 5 types (Click, Scroll, Attention, Rage, Dead)
+- ✅ **Funnel Analysis** - Multi-step conversion tracking
+- ✅ **Feature Flags** - Percentage-based rollout with targeting
+- ✅ **Analytics** - 6 platforms (Amplitude, Segment, GA4, Mixpanel, Heap, PostHog)
 
 ### From v3.0
-- ✅ **React Hooks** & **Vue 3 Composables**
-- ✅ **8 Detection Algorithms** (rage clicks, form failures, navigation loops, etc.)
-- ✅ **6 Widget Types** (Banner, Tooltip, Checklist, Modal, Toast, Product Tour)
-- ✅ **A/B Testing** & **User Segmentation**
-- ✅ **Internationalization** (8 languages)
-- ✅ **Playbook Validator** & **Performance Profiler**
+- ✅ **8 Detection Algorithms** - Rage clicks, form failures, navigation loops, etc.
+- ✅ **6 Widget Types** - Banner, Tooltip, Checklist, Modal, Toast, Product Tour
+- ✅ **A/B Testing** - Variant testing with statistical analysis
+- ✅ **Internationalization** - 8 languages
+- ✅ **Developer Tools** - Playbook validator, performance profiler
 
 ---
 
