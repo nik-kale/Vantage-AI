@@ -1,6 +1,6 @@
-# Vantage AI v4.0
+# Vantage AI v5.0
 
-### Real-Time, In-Browser UX Intelligence & Guidance Framework with Session Replay, Heatmaps & Funnel Analysis
+### Complete UX Intelligence Platform: Real-Time Guidance, Session Replay, Heatmaps, Funnel Analysis & User Feedback
 
 **Vantage AI** is a **production-ready, enterprise-grade browser-native framework** that helps your users when they actually need help.
 

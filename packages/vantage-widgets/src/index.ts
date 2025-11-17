@@ -1,6 +1,18 @@
 export * from "./Banner";
 export * from "./types";
 
+// v3.0 and earlier widgets
+export { Banner } from "./components/Banner";
+export { Tooltip } from "./components/Tooltip";
+export { Checklist } from "./components/Checklist";
+export { Modal } from "./components/Modal";
+export { Toast } from "./components/Toast";
+export { ProductTour } from "./components/ProductTour";
+
+// v5.0 new widgets
+export { Survey } from "./components/Survey";
+export { FeedbackButton } from "./components/FeedbackButton";
+
 import { Banner } from "./Banner";
 import type { Recommendation } from "@vantage-ai/sdk";
 

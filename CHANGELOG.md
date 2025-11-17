@@ -5,6 +5,65 @@ All notable changes to Vantage AI will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2025-01-17
+
+### Added
+
+#### New Packages
+- **Svelte Support** (`@vantage-ai/svelte`): Full Svelte 4 & 5 integration
+  - VantageStore: Core SDK store with recommendations and lifecycle management
+  - RecommendationStore: Recommendation history and dismissal tracking
+  - GuidanceStore: Active guidance state management
+  - PlaybookStore: Dynamic playbook loading and management
+  - AnalyticsStore: Event tracking and user identification
+  - Full reactive state management using Svelte stores (writable, readable, derived)
+  - TypeScript support with complete type definitions
+  - Compatible with both Svelte 4 and Svelte 5
+
+#### New Widgets
+- **Survey Widget** (`@vantage-ai/widgets`): Multi-question survey component
+  - 5 question types:
+    - Rating: Star-based rating (customizable min/max, default 1-5)
+    - NPS: Net Promoter Score (0-10 scale with color coding)
+    - Multiple Choice: Radio button selections
+    - Text: Free-form textarea input
+    - Yes/No: Binary choice questions
+  - Multi-step navigation with Previous/Next buttons
+  - Progress bar showing completion percentage
+  - Required field validation
+  - Three positioning options: center (modal), bottom-right, bottom-left
+  - Modal backdrop for center position
+  - XSS protection via sanitizeHTML utility
+  - Customizable title and description
+  - Submit and close callbacks
+
+- **FeedbackButton Widget** (`@vantage-ai/widgets`): Floating feedback collection
+  - Customizable positioning: bottom-right, bottom-left, right, left
+  - Configurable label, icon, and color
+  - Hover animations (scale and shadow effects)
+  - Pre-configured 3-question survey:
+    - Rating (1-5 stars)
+    - Category selection (Bug, Feature Request, UX, Performance, Documentation, Other)
+    - Optional message textarea
+  - Opens Survey widget in modal on click
+  - Fully customizable through props
+
+### Enhanced
+
+#### Widgets Package
+- Updated exports to include Survey and FeedbackButton components
+- Enhanced component library with user feedback capabilities
+
+### Documentation
+- Added comprehensive V5-IMPLEMENTATION-SUMMARY.md with usage examples
+- Updated README.md to reflect Complete UX Intelligence Platform
+- Updated package versions across all modules
+
+### Framework Support
+- Now supporting React, Vue 3, and Svelte frameworks
+- Consistent API across all framework integrations
+- Framework-agnostic core SDK
+
 ## [4.0.0] - 2025-01-17
 
 ### Added
