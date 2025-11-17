@@ -1,6 +1,6 @@
-# Vantage AI v3.0
+# Vantage AI v4.0
 
-### Real-Time, In-Browser UX Intelligence & Guidance Framework
+### Real-Time, In-Browser UX Intelligence & Guidance Framework with Session Replay, Heatmaps & Funnel Analysis
 
 **Vantage AI** is a **production-ready, enterprise-grade browser-native framework** that helps your users when they actually need help.
 
@@ -19,39 +19,55 @@ All in **real time**, with **enterprise-grade security**, **framework support**,
 
 ---
 
-## 🚀 What's New in v3.0
+## 🚀 What's New in v4.0
 
-### Complete Framework Support
-- ✅ **React Hooks** (`@vantage-ai/react-hooks`)
-- ✅ **Vue 3 Composables** (`@vantage-ai/vue`)
-- ⏳ **Svelte Stores** (coming soon)
-- ⏳ **Web Components** (framework-agnostic)
+### 🎬 Session Replay (Privacy-First)
+- ✅ **DOM snapshot & mutation recording**
+- ✅ **Mouse tracking, scrolling, network events**
+- ✅ **Automatic PII filtering** (emails, phones, SSNs, credit cards)
+- ✅ **Password/sensitive data masking**
+- ✅ **Privacy levels:** strict | balanced | permissive
+- ✅ **Session playback** with speed control
+- ✅ **Export sessions** as JSON
 
-### Analytics Ecosystem
-- ✅ **Amplitude** integration
-- ✅ **Segment** integration
-- ✅ **Google Analytics 4** integration
-- ✅ Custom adapter framework
+### 🔥 Heatmaps (5 Types)
+- ✅ **Click Heatmap** - Where users click
+- ✅ **Scroll Heatmap** - Scroll depth visualization
+- ✅ **Attention Heatmap** - Where users pause/hover
+- ✅ **Rage Click Heatmap** - Frustration points
+- ✅ **Dead Click Heatmap** - Clicks with no effect
+- ✅ **Canvas-based rendering** with 3 color schemes
+- ✅ **Export/import** heatmap data
 
-### Advanced Features
-- ✅ **A/B Testing** framework
-- ✅ **User Segmentation** engine
-- ✅ **Session Management** & journey tracking
+### 📊 Funnel Analysis
+- ✅ **Multi-step conversion tracking**
+- ✅ **Drop-off analysis** at each step
+- ✅ **Time-to-convert metrics**
+- ✅ **Visual funnel renderer**
+- ✅ **Conversion window** tracking
+
+### 🚩 Feature Flags
+- ✅ **Percentage-based rollout**
+- ✅ **User segment targeting**
+- ✅ **Environment-specific** flags
+- ✅ **Time-limited features**
+- ✅ **Local overrides** for testing
+
+### 📈 Enhanced Analytics (6 Platforms)
+- ✅ Amplitude
+- ✅ Segment
+- ✅ Google Analytics 4
+- ✅ **NEW: Mixpanel**
+- ✅ **NEW: Heap**
+- ✅ **NEW: PostHog**
+
+### From v3.0
+- ✅ **React Hooks** & **Vue 3 Composables**
+- ✅ **8 Detection Algorithms** (rage clicks, form failures, navigation loops, etc.)
+- ✅ **6 Widget Types** (Banner, Tooltip, Checklist, Modal, Toast, Product Tour)
+- ✅ **A/B Testing** & **User Segmentation**
 - ✅ **Internationalization** (8 languages)
-
-### Developer Experience
-- ✅ **Playbook Validator** with security checks
-- ✅ **Performance Profiler** for optimization
-- ✅ **Testing Infrastructure** (Vitest, 80%+ coverage target)
-- ✅ **TypeScript** throughout with strict mode
-
-### 6 Widget Types
-1. Banner
-2. Tooltip
-3. Checklist
-4. Modal
-5. **Toast** (new in v3)
-6. **Product Tour** (new in v3)
+- ✅ **Playbook Validator** & **Performance Profiler**
 
 ---
 

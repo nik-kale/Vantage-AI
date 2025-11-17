@@ -1,0 +1,29 @@
+{
+  "name": "@vantage-ai/session-replay",
+  "version": "4.0.0",
+  "description": "Privacy-first session replay for Vantage AI",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest"
+  },
+  "keywords": [
+    "session-replay",
+    "ux",
+    "analytics",
+    "privacy-first"
+  ],
+  "author": "Vantage AI",
+  "license": "MIT",
+  "dependencies": {
+    "@vantage-ai/sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  }
+}
