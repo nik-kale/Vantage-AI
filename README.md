@@ -1,6 +1,6 @@
-# Vantage AI v6.0
+# Vantage AI v7.0
 
-### Enterprise Analytics Platform: Real-Time Guidance, Mobile SDK, Cohort Analysis, Custom Dashboards & Complete Framework Coverage
+### AI-Powered Analytics Platform: Anomaly Detection, Web Components, Advanced A/B Testing, Real-time Collaboration & Complete Framework Coverage
 
 **Vantage AI** is a **production-ready, enterprise-grade browser-native framework** that helps your users when they actually need help.
 

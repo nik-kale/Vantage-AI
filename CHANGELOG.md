@@ -5,6 +5,14 @@ All notable changes to Vantage AI will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0.0] - 2025-01-17
+
+### Added
+- **AI-Powered Insights** (`@vantage-ai/ai-insights`): Anomaly detection, trend analysis, forecasting
+- **Web Components** (`@vantage-ai/web-components`): Framework-agnostic custom elements
+- **Advanced A/B Testing** (`@vantage-ai/ab-testing`): Multivariate testing with statistical significance
+- **Real-time Collaboration** (`@vantage-ai/realtime`): WebSocket-based dashboard sharing
+
 ## [6.0.0] - 2025-01-17
 
 ### Added

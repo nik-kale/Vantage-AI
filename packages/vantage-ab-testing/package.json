@@ -1,0 +1,18 @@
+{
+  "name": "@vantage-ai/ab-testing",
+  "version": "7.0.0",
+  "description": "Advanced A/B and multivariate testing with statistical significance",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest"
+  },
+  "keywords": ["ab-testing", "multivariate", "experimentation", "vantage-ai"],
+  "author": "Vantage AI",
+  "license": "MIT",
+  "dependencies": {"@vantage-ai/sdk": "workspace:*"},
+  "devDependencies": {"tsup": "^8.0.1", "typescript": "^5.3.3", "vitest": "^1.1.0"}
+}
