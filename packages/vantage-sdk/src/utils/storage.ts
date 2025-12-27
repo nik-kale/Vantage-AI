@@ -2,6 +2,8 @@
  * Secure storage utilities with encryption support
  */
 
+import { logger } from "./logger";
+
 // Helper for IndexedDB key storage
 class KeyStore {
   private dbName = "vantage-keystore";
@@ -25,7 +27,7 @@ class KeyStore {
         resolve();
       };
       request.onerror = () => {
-        console.warn("SecureStorage: Failed to open IndexedDB", request.error);
+        logger.warn("SecureStorage: Failed to open IndexedDB", request.error);
         resolve(); // Continue without DB (will fail later or fallback)
       };
     });
@@ -86,7 +88,7 @@ export class SecureStorage {
         }
         return key;
       } catch (e) {
-        console.warn("SecureStorage: Web Crypto init failed, falling back to XOR", e);
+        logger.warn("SecureStorage: Web Crypto init failed, falling back to XOR", e);
         this.useWebCrypto = false;
       }
     }
@@ -134,7 +136,7 @@ export class SecureStorage {
         localStorage.setItem(this.getStorageKey(key), encrypted);
       }
     } catch (error) {
-      console.error("SecureStorage: Failed to set item", error);
+      logger.error("SecureStorage: Failed to set item", error);
     }
   }
 
@@ -169,7 +171,7 @@ export class SecureStorage {
       return JSON.parse(decrypted) as T;
 
     } catch (error) {
-      console.error("SecureStorage: Failed to get item", error);
+      logger.error("SecureStorage: Failed to get item", error);
       return null;
     }
   }
@@ -251,7 +253,7 @@ export class SessionStore {
     try {
       sessionStorage.setItem(this.getKey(key), JSON.stringify(value));
     } catch (error) {
-      console.error("SessionStore: Failed to set item", error);
+      logger.error("SessionStore: Failed to set item", error);
     }
   }
 
@@ -260,7 +262,7 @@ export class SessionStore {
       const item = sessionStorage.getItem(this.getKey(key));
       return item ? (JSON.parse(item) as T) : null;
     } catch (error) {
-      console.error("SessionStore: Failed to get item", error);
+      logger.error("SessionStore: Failed to get item", error);
       return null;
     }
   }

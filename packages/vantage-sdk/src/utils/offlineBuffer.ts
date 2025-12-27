@@ -1,4 +1,5 @@
 import type { EventContext } from "../types";
+import { logger } from "./logger";
 
 export interface OfflineBufferConfig {
   maxEvents?: number;
@@ -41,7 +42,7 @@ export class OfflineBuffer {
       };
 
       request.onerror = () => {
-        console.warn("Vantage: Failed to open offline buffer DB");
+        logger.warn("Vantage: Failed to open offline buffer DB");
         this.isSupported = false;
         resolve();
       };
@@ -138,4 +139,3 @@ export class OfflineBuffer {
     };
   }
 }
-

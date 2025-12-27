@@ -3,6 +3,8 @@
  * Real-time collaboration for dashboards with WebSocket
  */
 
+import { logger } from "@vantage-ai/sdk";
+
 export interface RealtimeConfig {
   url: string;
   roomId: string;
@@ -38,12 +40,12 @@ export class RealtimeClient {
       const parsed = this.safeJSONParse<RealtimeMessage>(event.data);
       
       if (!parsed) {
-        console.warn("RealtimeClient: Invalid JSON received");
+        logger.warn("RealtimeClient: Invalid JSON received");
         return;
       }
 
       if (!this.isValidMessageType(parsed.type)) {
-        console.warn(`RealtimeClient: Invalid message type '${parsed.type}'`);
+        logger.warn(`RealtimeClient: Invalid message type '${parsed.type}'`);
         return;
       }
 

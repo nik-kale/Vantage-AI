@@ -13,6 +13,7 @@ import { DomCollector } from "./collectors/domCollector";
 import { ErrorCollector } from "./collectors/errorCollector";
 import { OfflineBuffer } from "./utils/offlineBuffer";
 import { isBrowser } from "./utils/environment";
+import { logger } from "./utils/logger";
 
 interface StoredListener {
   type: string;
@@ -47,6 +48,10 @@ export class Vantage {
 
   constructor(config: VantageConfig) {
     this.config = config;
+
+    if (config.logger) {
+        logger.configure(config.logger);
+    }
     
     // Initialize detectors
     this.rageClickDetector = new RageClickDetector();
@@ -70,7 +75,7 @@ export class Vantage {
 
   start() {
     if (!isBrowser) {
-        console.warn('Vantage: Start called in non-browser environment');
+        logger.warn('Vantage: Start called in non-browser environment');
         return;
     }
 
@@ -211,7 +216,7 @@ export class Vantage {
             this.config.offline.onFlush(events);
         }
     } catch (e) {
-        console.warn("Vantage: Failed to flush offline events", e);
+        logger.warn("Vantage: Failed to flush offline events", e);
     }
   }
 
@@ -377,3 +382,4 @@ export function initVantage(config: VantageConfig): Vantage {
 }
 
 export * from "./types";
+export { logger, Logger, LogLevel, LoggerConfig } from "./utils/logger";

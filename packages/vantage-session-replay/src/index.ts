@@ -5,6 +5,7 @@
  */
 
 import { filterPII, sanitizeHTML } from "@vantage-ai/sdk/security/sanitizer";
+import { logger } from "@vantage-ai/sdk";
 
 export interface RecordingConfig {
   /** Capture mouse movements */
@@ -75,13 +76,13 @@ export class SessionReplay {
    */
   start(): void {
     if (this.isRecording) {
-      console.warn("Session replay already recording");
+      logger.warn("Session replay already recording");
       return;
     }
 
     // Sample rate check
     if (Math.random() > this.config.sampleRate) {
-      console.log("Session not sampled for replay");
+      logger.info("Session not sampled for replay");
       return;
     }
 
@@ -561,7 +562,7 @@ export class SessionReplay {
   private scheduleAutoStop(): void {
     setTimeout(() => {
       if (this.isRecording) {
-        console.log("Session replay auto-stopped after max duration");
+        logger.info("Session replay auto-stopped after max duration");
         this.stop();
       }
     }, this.config.maxDuration);

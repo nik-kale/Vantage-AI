@@ -1,4 +1,5 @@
 import type { EventContext } from "../types";
+import { logger } from "../utils/logger";
 
 export class PerformanceCollector {
   private route: string = window.location.pathname;
@@ -6,7 +7,7 @@ export class PerformanceCollector {
 
   start(callback: (ctx: EventContext) => void): void {
     if (!("PerformanceObserver" in window)) {
-      console.warn("PerformanceObserver not supported");
+      logger.warn("PerformanceObserver not supported");
       return;
     }
 
@@ -49,10 +50,10 @@ export class PerformanceCollector {
         this.observer.observe({ entryTypes: ["longtask", "layout-shift"] });
       } catch (e) {
         // Fallback if entryTypes not supported
-        console.warn("Some performance entry types not supported", e);
+        logger.warn("Some performance entry types not supported", e);
       }
     } catch (error) {
-      console.warn("Failed to start PerformanceCollector", error);
+      logger.warn("Failed to start PerformanceCollector", error);
     }
   }
 

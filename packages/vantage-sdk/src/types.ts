@@ -1,3 +1,5 @@
+import { LoggerConfig } from "./utils/logger";
+
 export type VantageMode = "lite" | "ai";
 
 export interface VantageConfig {
@@ -10,6 +12,7 @@ export interface VantageConfig {
     maxAge?: number;
     onFlush?: (events: EventContext[]) => void;
   };
+  logger?: Partial<LoggerConfig>;
 }
 
 export interface EventContext {

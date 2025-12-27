@@ -2,6 +2,9 @@
  * Analytics Adapter Interface
  * All analytics integrations must implement this interface
  */
+
+import { logger } from "@vantage-ai/sdk";
+
 export interface AnalyticsAdapter {
   /** Adapter name */
   name: string;
@@ -53,7 +56,7 @@ export class AnalyticsManager {
       try {
         adapter.track(event, properties);
       } catch (error) {
-        console.error(`Analytics adapter ${adapter.name} failed:`, error);
+        logger.error(`Analytics adapter ${adapter.name} failed:`, error);
       }
     }
   }
@@ -65,7 +68,7 @@ export class AnalyticsManager {
       try {
         adapter.identify(userId, traits);
       } catch (error) {
-        console.error(`Analytics adapter ${adapter.name} failed:`, error);
+        logger.error(`Analytics adapter ${adapter.name} failed:`, error);
       }
     }
   }
@@ -77,7 +80,7 @@ export class AnalyticsManager {
       try {
         adapter.page(name, properties);
       } catch (error) {
-        console.error(`Analytics adapter ${adapter.name} failed:`, error);
+        logger.error(`Analytics adapter ${adapter.name} failed:`, error);
       }
     }
   }
