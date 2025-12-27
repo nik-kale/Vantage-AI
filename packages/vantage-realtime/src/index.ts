@@ -35,8 +35,19 @@ export class RealtimeClient {
     };
 
     this.ws.onmessage = (event) => {
-      const message: RealtimeMessage = JSON.parse(event.data);
-      this.emit(message.type, message);
+      const parsed = this.safeJSONParse<RealtimeMessage>(event.data);
+      
+      if (!parsed) {
+        console.warn("RealtimeClient: Invalid JSON received");
+        return;
+      }
+
+      if (!this.isValidMessageType(parsed.type)) {
+        console.warn(`RealtimeClient: Invalid message type '${parsed.type}'`);
+        return;
+      }
+
+      this.emit(parsed.type, parsed);
     };
 
     this.ws.onclose = () => this.emit("disconnected", {});
@@ -66,6 +77,34 @@ export class RealtimeClient {
 
   private emit(event: string, data: any): void {
     this.listeners.get(event)?.forEach(cb => cb(data));
+  }
+
+  private isValidMessageType(type: string): boolean {
+    const validTypes = ["cursor", "selection", "update", "presence"];
+    return validTypes.includes(type);
+  }
+
+  private safeJSONParse<T>(json: string): T | null {
+    try {
+      const parsed = JSON.parse(json);
+      if (typeof parsed === "object" && parsed !== null) {
+        return this.sanitizeObjectKeys(parsed) as T;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  private sanitizeObjectKeys<T extends Record<string, any>>(obj: T): Partial<T> {
+    const dangerous = ["__proto__", "constructor", "prototype"];
+    const sanitized: any = {};
+    for (const key in obj) {
+      if (!dangerous.includes(key)) {
+        sanitized[key] = obj[key];
+      }
+    }
+    return sanitized;
   }
 }
 
