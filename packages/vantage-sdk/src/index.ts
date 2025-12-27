@@ -12,6 +12,7 @@ import { SuspicionEngine } from "./signals/suspicionEngine";
 import { DomCollector } from "./collectors/domCollector";
 import { ErrorCollector } from "./collectors/errorCollector";
 import { OfflineBuffer } from "./utils/offlineBuffer";
+import { isBrowser } from "./utils/environment";
 
 interface StoredListener {
   type: string;
@@ -61,13 +62,18 @@ export class Vantage {
     this.domCollector = new DomCollector();
     this.errorCollector = new ErrorCollector();
 
-    if (config.offline?.enabled) {
+    if (config.offline?.enabled && isBrowser) {
       this.offlineBuffer = new OfflineBuffer(config.offline);
       this.offlineBuffer.init();
     }
   }
 
   start() {
+    if (!isBrowser) {
+        console.warn('Vantage: Start called in non-browser environment');
+        return;
+    }
+
     if (this.isRunning) return;
     this.isRunning = true;
 

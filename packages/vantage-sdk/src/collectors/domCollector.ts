@@ -1,10 +1,12 @@
 import type { EventContext } from "../types";
+import { isBrowser } from "../utils/environment";
 
 export class DomCollector {
-  private route: string = window.location.pathname;
+  private route: string = isBrowser ? window.location.pathname : "";
   private observer: MutationObserver | null = null;
 
   start(callback: (ctx: EventContext) => void) {
+    if (!isBrowser) return;
     if (this.observer) return;
 
     this.observer = new MutationObserver(() => {

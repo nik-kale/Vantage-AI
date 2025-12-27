@@ -1,11 +1,14 @@
 import type { EventContext } from "../types";
+import { isBrowser } from "../utils/environment";
 
 export class ErrorCollector {
-  private route: string = window.location.pathname;
+  private route: string = isBrowser ? window.location.pathname : "";
   private errorHandler: ((event: ErrorEvent) => void) | null = null;
   private rejectionHandler: ((event: PromiseRejectionEvent) => void) | null = null;
 
   start(callback: (ctx: EventContext) => void): void {
+    if (!isBrowser) return;
+    
     // Global error handler
     this.errorHandler = (event: ErrorEvent) => {
       callback({
