@@ -50,6 +50,11 @@ export class SessionReplay {
   private isRecording = false;
   private eventBuffer: RecordedEvent[] = [];
   private maxBufferSize = 1000;
+  
+  // Cleanup refs
+  private originalFetch: typeof fetch | null = null;
+  private originalConsole: { log: any; error: any; warn: any } | null = null;
+  private cleanupListeners: Array<() => void> = [];
 
   constructor(config: RecordingConfig = {}) {
     this.config = {
@@ -112,6 +117,24 @@ export class SessionReplay {
     // Cleanup observers
     this.observers.forEach((observer) => observer.disconnect());
     this.observers = [];
+
+    // Cleanup Listeners
+    this.cleanupListeners.forEach(cleanup => cleanup());
+    this.cleanupListeners = [];
+
+    // Restore Global Fetch
+    if (this.originalFetch) {
+      window.fetch = this.originalFetch;
+      this.originalFetch = null;
+    }
+
+    // Restore Console
+    if (this.originalConsole) {
+      console.log = this.originalConsole.log;
+      console.error = this.originalConsole.error;
+      console.warn = this.originalConsole.warn;
+      this.originalConsole = null;
+    }
 
     const recordedSession = this.session;
     this.session = null;
@@ -234,9 +257,11 @@ export class SessionReplay {
       });
     }, 50);
 
-    window.addEventListener("mousemove", throttledMouseMove);
+    const mouseMoveHandler = throttledMouseMove;
+    window.addEventListener("mousemove", mouseMoveHandler);
+    this.cleanupListeners.push(() => window.removeEventListener("mousemove", mouseMoveHandler));
 
-    window.addEventListener("click", (e) => {
+    const clickHandler = (e: MouseEvent) => {
       this.recordEvent({
         type: "mouse",
         timestamp: Date.now(),
@@ -247,7 +272,9 @@ export class SessionReplay {
           target: this.getElementPath(e.target as Element)
         }
       });
-    });
+    };
+    window.addEventListener("click", clickHandler);
+    this.cleanupListeners.push(() => window.removeEventListener("click", clickHandler));
   }
 
   /**
@@ -265,7 +292,9 @@ export class SessionReplay {
       });
     }, 100);
 
-    window.addEventListener("scroll", throttledScroll);
+    const scrollHandler = throttledScroll;
+    window.addEventListener("scroll", scrollHandler);
+    this.cleanupListeners.push(() => window.removeEventListener("scroll", scrollHandler));
   }
 
   /**
@@ -273,49 +302,55 @@ export class SessionReplay {
    */
   private setupNetworkRecording(): void {
     // Intercept fetch
-    const originalFetch = window.fetch;
-    window.fetch = async (...args) => {
-      const startTime = Date.now();
-      const url = typeof args[0] === "string" ? args[0] : args[0].url;
+    if (!this.originalFetch) {
+        this.originalFetch = window.fetch;
+        window.fetch = async (...args) => {
+            const startTime = Date.now();
+            const url = typeof args[0] === "string" ? args[0] : (args[0] as Request).url; // Safe access
 
-      try {
-        const response = await originalFetch(...args);
-        this.recordEvent({
-          type: "network",
-          timestamp: Date.now(),
-          data: {
-            method: args[1]?.method || "GET",
-            url: filterPII(url),
-            status: response.status,
-            duration: Date.now() - startTime
-          }
-        });
-        return response;
-      } catch (error) {
-        this.recordEvent({
-          type: "network",
-          timestamp: Date.now(),
-          data: {
-            method: args[1]?.method || "GET",
-            url: filterPII(url),
-            error: (error as Error).message,
-            duration: Date.now() - startTime
-          }
-        });
-        throw error;
-      }
-    };
+            try {
+                const response = await this.originalFetch!(...args);
+                this.recordEvent({
+                type: "network",
+                timestamp: Date.now(),
+                data: {
+                    method: args[1]?.method || "GET",
+                    url: filterPII(url),
+                    status: response.status,
+                    duration: Date.now() - startTime
+                }
+                });
+                return response;
+            } catch (error) {
+                this.recordEvent({
+                type: "network",
+                timestamp: Date.now(),
+                data: {
+                    method: args[1]?.method || "GET",
+                    url: filterPII(url),
+                    error: (error as Error).message,
+                    duration: Date.now() - startTime
+                }
+                });
+                throw error;
+            }
+        };
+    }
   }
 
   /**
    * Setup console recording
    */
   private setupConsoleRecording(): void {
-    const originalConsole = {
+    if (this.originalConsole) return;
+
+    this.originalConsole = {
       log: console.log,
       error: console.error,
       warn: console.warn
     };
+
+    const originalConsole = this.originalConsole; // Capture for closure
 
     ["log", "error", "warn"].forEach((level) => {
       (console as any)[level] = (...args: any[]) => {
@@ -337,7 +372,7 @@ export class SessionReplay {
    * Setup viewport recording
    */
   private setupViewportRecording(): void {
-    window.addEventListener("resize", () => {
+    const resizeHandler = () => {
       this.recordEvent({
         type: "viewport",
         timestamp: Date.now(),
@@ -346,7 +381,10 @@ export class SessionReplay {
           height: window.innerHeight
         }
       });
-    });
+    };
+    
+    window.addEventListener("resize", resizeHandler);
+    this.cleanupListeners.push(() => window.removeEventListener("resize", resizeHandler));
   }
 
   /**
