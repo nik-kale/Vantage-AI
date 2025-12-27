@@ -11,6 +11,7 @@ import { TimeOnElementDetector } from "./detectors/timeOnElement";
 import { SuspicionEngine } from "./signals/suspicionEngine";
 import { DomCollector } from "./collectors/domCollector";
 import { ErrorCollector } from "./collectors/errorCollector";
+import { OfflineBuffer } from "./utils/offlineBuffer";
 
 interface StoredListener {
   type: string;
@@ -35,6 +36,7 @@ export class Vantage {
   private suspicionEngine: SuspicionEngine;
   private domCollector: DomCollector;
   private errorCollector: ErrorCollector;
+  private offlineBuffer: OfflineBuffer | null = null;
 
   // Lifecycle
   private isRunning = false;
@@ -58,11 +60,21 @@ export class Vantage {
     this.suspicionEngine = new SuspicionEngine(config.playbooks ?? []);
     this.domCollector = new DomCollector();
     this.errorCollector = new ErrorCollector();
+
+    if (config.offline?.enabled) {
+      this.offlineBuffer = new OfflineBuffer(config.offline);
+      this.offlineBuffer.init();
+    }
   }
 
   start() {
     if (this.isRunning) return;
     this.isRunning = true;
+
+    // Offline Handling
+    if (this.offlineBuffer) {
+      this.addListener(window, "online", () => this.flushOfflineEvents());
+    }
 
     // 1. Click Handling (Rage Clicks & Dead Clicks)
     this.addListener(window, "click", (e) => {
@@ -178,29 +190,45 @@ export class Vantage {
     this.listeners.push({ target, type, handler, options });
   }
 
+  private processEvent(ctx: EventContext) {
+    if (this.offlineBuffer && !navigator.onLine) {
+        this.offlineBuffer.add(ctx);
+    }
+    this.suspicionEngine.addEvent(ctx);
+  }
+
+  private async flushOfflineEvents() {
+    if (!this.offlineBuffer || !this.config.offline?.onFlush) return;
+    try {
+        const events = await this.offlineBuffer.popAll();
+        if (events.length > 0) {
+            this.config.offline.onFlush(events);
+        }
+    } catch (e) {
+        console.warn("Vantage: Failed to flush offline events", e);
+    }
+  }
+
   private handleClick(ctx: EventContext, target: HTMLElement | null) {
     // Rage Clicks
     const rageSignal = this.rageClickDetector.recordClick(ctx);
     if (rageSignal) this.evaluateSignal(rageSignal);
 
-    // Dead Clicks - check if element is interactive or changed something
-    // This is a simplified heuristic. In a real app we might check if DOM changed or URL changed.
-    // For now, we assume 'hadEffect' is false unless we prove otherwise (hooks could update this).
-    // In this basic version, we just pass false to let the detector aggregate.
+    // Dead Clicks
     const deadSignal = this.deadClickDetector.recordClick(ctx, false); 
     if (deadSignal) this.evaluateSignal(deadSignal);
 
-    this.suspicionEngine.addEvent(ctx);
+    this.processEvent(ctx);
   }
 
   private handleDomEvent(ctx: EventContext) {
-    this.suspicionEngine.addEvent(ctx);
+    this.processEvent(ctx);
   }
 
   private handleErrorEvent(ctx: EventContext) {
     const signal = this.errorCascadeDetector.recordError(ctx);
     if (signal) this.evaluateSignal(signal);
-    this.suspicionEngine.addEvent(ctx);
+    this.processEvent(ctx);
   }
 
   private handleFormEvent(target: HTMLElement, form: HTMLFormElement | null, hasErrors: boolean) {
@@ -217,7 +245,7 @@ export class Vantage {
     
     const signal = this.formFailureDetector.recordSubmit(ctx);
     if (signal) this.evaluateSignal(signal);
-    this.suspicionEngine.addEvent(ctx);
+    this.processEvent(ctx);
   }
 
   private setupNavigationMonitoring() {
@@ -230,7 +258,7 @@ export class Vantage {
       };
       const signal = this.navigationLoopDetector.recordNavigation(ctx);
       if (signal) this.evaluateSignal(signal);
-      this.suspicionEngine.addEvent(ctx);
+      this.processEvent(ctx);
     };
 
     this.addListener(window, "popstate", () => handleNav("back"));
@@ -303,7 +331,6 @@ export class Vantage {
   }
 
   private setupFocusMonitoring() {
-    // Using focusin/focusout as primary means, but could be enhanced with IntersectionObserver
     this.addListener(window, "focusin", (e) => {
         const target = e.target as HTMLElement;
         const ctx: EventContext = {

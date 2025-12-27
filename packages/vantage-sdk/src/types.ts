@@ -4,6 +4,12 @@ export interface VantageConfig {
   mode: VantageMode;
   playbooks?: Playbook[];
   onTrigger?: (recommendation: Recommendation) => void;
+  offline?: {
+    enabled: boolean;
+    maxEvents?: number;
+    maxAge?: number;
+    onFlush?: (events: EventContext[]) => void;
+  };
 }
 
 export interface EventContext {
