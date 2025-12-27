@@ -58,4 +58,8 @@ export class SuspicionEngine {
 
     return true;
   }
+
+  clear(): void {
+    this.buffer = [];
+  }
 }

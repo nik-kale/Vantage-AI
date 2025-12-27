@@ -12,6 +12,13 @@ import { SuspicionEngine } from "./signals/suspicionEngine";
 import { DomCollector } from "./collectors/domCollector";
 import { ErrorCollector } from "./collectors/errorCollector";
 
+interface StoredListener {
+  type: string;
+  handler: EventListenerOrEventListenerObject;
+  target: EventTarget;
+  options?: boolean | AddEventListenerOptions;
+}
+
 export class Vantage {
   private config: VantageConfig;
   
@@ -28,6 +35,12 @@ export class Vantage {
   private suspicionEngine: SuspicionEngine;
   private domCollector: DomCollector;
   private errorCollector: ErrorCollector;
+
+  // Lifecycle
+  private isRunning = false;
+  private listeners: StoredListener[] = [];
+  private originalPushState: ((...args: any[]) => void) | null = null;
+  private originalReplaceState: ((...args: any[]) => void) | null = null;
 
   constructor(config: VantageConfig) {
     this.config = config;
@@ -48,8 +61,11 @@ export class Vantage {
   }
 
   start() {
+    if (this.isRunning) return;
+    this.isRunning = true;
+
     // 1. Click Handling (Rage Clicks & Dead Clicks)
-    window.addEventListener("click", (e) => {
+    this.addListener(window, "click", (e) => {
       const target = e.target as HTMLElement | null;
       const ctx: EventContext = {
         route: window.location.pathname,
@@ -78,7 +94,7 @@ export class Vantage {
 
     // 4. Form Interactions (Form Failure)
     // Capture 'invalid' events for form validation errors
-    window.addEventListener("invalid", (e) => {
+    this.addListener(window, "invalid", (e) => {
       const target = e.target as HTMLElement;
       if (target) {
         // Find parent form
@@ -88,7 +104,7 @@ export class Vantage {
     }, true); // Capture phase is required for 'invalid' event
 
     // Capture 'submit' events
-    window.addEventListener("submit", (e) => {
+    this.addListener(window, "submit", (e) => {
       const target = e.target as HTMLElement;
       if (target) {
         const form = target instanceof HTMLFormElement ? target : target.closest("form");
@@ -108,6 +124,58 @@ export class Vantage {
 
     // 8. Focus Monitoring (Time On Element)
     this.setupFocusMonitoring();
+  }
+
+  stop() {
+    if (!this.isRunning) return;
+
+    // Remove all listeners
+    this.listeners.forEach(({ target, type, handler, options }) => {
+      target.removeEventListener(type, handler, options);
+    });
+    this.listeners = [];
+
+    // Stop collectors
+    this.domCollector.stop();
+    this.errorCollector.stop();
+
+    // Restore history methods
+    if (this.originalPushState) {
+      history.pushState = this.originalPushState;
+      this.originalPushState = null;
+    }
+    if (this.originalReplaceState) {
+      history.replaceState = this.originalReplaceState;
+      this.originalReplaceState = null;
+    }
+
+    this.isRunning = false;
+  }
+
+  destroy() {
+    this.stop();
+    
+    // Clear state in detectors
+    this.rageClickDetector.clear();
+    this.deadClickDetector.clear();
+    this.errorCascadeDetector.clear();
+    this.formFailureDetector.clear();
+    this.hoverConfusionDetector.clear();
+    this.navigationLoopDetector.clear();
+    this.scrollAbandonmentDetector.clear();
+    this.timeOnElementDetector.clear();
+    
+    this.suspicionEngine.clear();
+  }
+
+  private addListener(
+    target: EventTarget, 
+    type: string, 
+    handler: EventListenerOrEventListenerObject, 
+    options?: boolean | AddEventListenerOptions
+  ) {
+    target.addEventListener(type, handler, options);
+    this.listeners.push({ target, type, handler, options });
   }
 
   private handleClick(ctx: EventContext, target: HTMLElement | null) {
@@ -165,24 +233,28 @@ export class Vantage {
       this.suspicionEngine.addEvent(ctx);
     };
 
-    window.addEventListener("popstate", () => handleNav("back"));
+    this.addListener(window, "popstate", () => handleNav("back"));
     
     // Monkeypatch pushState/replaceState
-    const originalPushState = history.pushState;
-    history.pushState = (...args) => {
-      originalPushState.apply(history, args);
-      handleNav("forward");
-    };
+    if (!this.originalPushState) {
+        this.originalPushState = history.pushState;
+        history.pushState = (...args) => {
+            this.originalPushState?.apply(history, args);
+            handleNav("forward");
+        };
+    }
 
-    const originalReplaceState = history.replaceState;
-    history.replaceState = (...args) => {
-      originalReplaceState.apply(history, args);
-      handleNav("forward");
-    };
+    if (!this.originalReplaceState) {
+        this.originalReplaceState = history.replaceState;
+        history.replaceState = (...args) => {
+            this.originalReplaceState?.apply(history, args);
+            handleNav("forward");
+        };
+    }
   }
 
   private setupHoverMonitoring() {
-    window.addEventListener("mouseover", (e) => {
+    this.addListener(window, "mouseover", (e) => {
       const target = e.target as HTMLElement;
       const ctx: EventContext = {
         route: window.location.pathname,
@@ -193,7 +265,7 @@ export class Vantage {
       this.hoverConfusionDetector.recordHoverStart(ctx);
     });
 
-    window.addEventListener("mouseout", (e) => {
+    this.addListener(window, "mouseout", (e) => {
       const target = e.target as HTMLElement;
       const ctx: EventContext = {
         route: window.location.pathname,
@@ -208,7 +280,7 @@ export class Vantage {
 
   private setupScrollMonitoring() {
     let scrollTimeout: any;
-    window.addEventListener("scroll", () => {
+    const scrollHandler = () => {
         if (scrollTimeout) return;
         
         scrollTimeout = setTimeout(() => {
@@ -225,12 +297,14 @@ export class Vantage {
             if (signal) this.evaluateSignal(signal);
             scrollTimeout = null;
         }, 100); // Throttle
-    });
+    };
+    
+    this.addListener(window, "scroll", scrollHandler);
   }
 
   private setupFocusMonitoring() {
     // Using focusin/focusout as primary means, but could be enhanced with IntersectionObserver
-    window.addEventListener("focusin", (e) => {
+    this.addListener(window, "focusin", (e) => {
         const target = e.target as HTMLElement;
         const ctx: EventContext = {
             route: window.location.pathname,
@@ -241,7 +315,7 @@ export class Vantage {
         this.timeOnElementDetector.recordFocusStart(ctx);
     });
 
-    window.addEventListener("focusout", (e) => {
+    this.addListener(window, "focusout", (e) => {
         const target = e.target as HTMLElement;
         const ctx: EventContext = {
             route: window.location.pathname,

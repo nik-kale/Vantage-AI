@@ -31,4 +31,8 @@ export class RageClickDetector {
 
     return null;
   }
+
+  clear(): void {
+    this.state.clicks = [];
+  }
 }
