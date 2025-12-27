@@ -92,7 +92,7 @@ export class SecureStorage {
         this.useWebCrypto = false;
       }
     }
-    
+
     // Fallback key generation for XOR
     return this.generateXorKey();
   }
@@ -123,7 +123,7 @@ export class SecureStorage {
           encryptionKey as CryptoKey,
           data
         );
-        
+
         const storageValue = JSON.stringify({
           alg: "aes-gcm",
           iv: this.arrayBufferToBase64(iv),

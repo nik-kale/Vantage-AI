@@ -24,7 +24,7 @@ describe("Logger", () => {
     logger.configure({ level: 'warn' });
     logger.info("Should not log");
     logger.warn("Should log");
-    
+
     expect(consoleSpy.log).not.toHaveBeenCalled();
     expect(consoleSpy.warn).toHaveBeenCalledWith("Should log");
   });
@@ -32,7 +32,7 @@ describe("Logger", () => {
   it("should support JSON format", () => {
     logger.configure({ format: 'json' });
     logger.info("Test");
-    
+
     expect(consoleSpy.log).toHaveBeenCalled();
     const call = consoleSpy.log.mock.calls[0][0];
     const json = JSON.parse(call);

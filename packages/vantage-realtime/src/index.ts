@@ -38,7 +38,7 @@ export class RealtimeClient {
 
     this.ws.onmessage = (event) => {
       const parsed = this.safeJSONParse<RealtimeMessage>(event.data);
-      
+
       if (!parsed) {
         logger.warn("RealtimeClient: Invalid JSON received");
         return;

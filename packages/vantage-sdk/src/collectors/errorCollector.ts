@@ -8,7 +8,7 @@ export class ErrorCollector {
 
   start(callback: (ctx: EventContext) => void): void {
     if (!isBrowser) return;
-    
+
     // Global error handler
     this.errorHandler = (event: ErrorEvent) => {
       callback({

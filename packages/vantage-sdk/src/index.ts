@@ -24,7 +24,7 @@ interface StoredListener {
 
 export class Vantage {
   private config: VantageConfig;
-  
+
   // Detectors
   private rageClickDetector: RageClickDetector;
   private deadClickDetector: DeadClickDetector;
@@ -53,7 +53,7 @@ export class Vantage {
     if (config.logger) {
         logger.configure(config.logger);
     }
-    
+
     // Initialize detectors
     this.rageClickDetector = new RageClickDetector();
     this.deadClickDetector = new DeadClickDetector();
@@ -207,7 +207,7 @@ export class Vantage {
 
   destroy() {
     this.stop();
-    
+
     // Clear state in detectors
     this.rageClickDetector.clear();
     this.deadClickDetector.clear();
@@ -217,14 +217,14 @@ export class Vantage {
     this.navigationLoopDetector.clear();
     this.scrollAbandonmentDetector.clear();
     this.timeOnElementDetector.clear();
-    
+
     this.suspicionEngine.clear();
   }
 
   private addListener(
-    target: EventTarget, 
-    type: string, 
-    handler: EventListenerOrEventListenerObject, 
+    target: EventTarget,
+    type: string,
+    handler: EventListenerOrEventListenerObject,
     options?: boolean | AddEventListenerOptions
   ) {
     target.addEventListener(type, handler, options);
@@ -233,7 +233,7 @@ export class Vantage {
 
   private processEvent(ctx: EventContext) {
     let context = ctx;
-    
+
     // Plugins onEvent
     for (const plugin of this.plugins) {
         try {
@@ -270,7 +270,7 @@ export class Vantage {
     if (rageSignal) this.evaluateSignal(rageSignal);
 
     // Dead Clicks
-    const deadSignal = this.deadClickDetector.recordClick(ctx, false); 
+    const deadSignal = this.deadClickDetector.recordClick(ctx, false);
     if (deadSignal) this.evaluateSignal(deadSignal);
 
     this.processEvent(ctx);
@@ -297,7 +297,7 @@ export class Vantage {
         hasErrors
       }
     };
-    
+
     const signal = this.formFailureDetector.recordSubmit(ctx);
     if (signal) this.evaluateSignal(signal);
     this.processEvent(ctx);
@@ -317,7 +317,7 @@ export class Vantage {
     };
 
     this.addListener(window, "popstate", () => handleNav("back"));
-    
+
     // Monkeypatch pushState/replaceState
     if (!this.originalPushState) {
         this.originalPushState = history.pushState;
@@ -365,13 +365,13 @@ export class Vantage {
     let scrollTimeout: any;
     const scrollHandler = () => {
         if (scrollTimeout) return;
-        
+
         scrollTimeout = setTimeout(() => {
             const ctx: EventContext = {
                 route: window.location.pathname,
                 timestamp: Date.now(),
                 eventType: "scroll",
-                details: { 
+                details: {
                     scrollPosition: window.scrollY,
                     viewportHeight: window.innerHeight
                 }
@@ -381,7 +381,7 @@ export class Vantage {
             scrollTimeout = null;
         }, 100); // Throttle
     };
-    
+
     this.addListener(window, "scroll", scrollHandler);
   }
 
@@ -412,7 +412,7 @@ export class Vantage {
 
   private evaluateSignal(signal: any) {
     let currentSignal = signal;
-    
+
     // Plugins onSignal
     for (const plugin of this.plugins) {
         try {

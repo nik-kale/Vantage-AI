@@ -79,7 +79,7 @@ export class Logger {
       const args: any[] = [entry.message];
       if (entry.data !== undefined) args.push(entry.data);
       if (entry.context !== undefined) args.push(entry.context);
-      
+
       switch (entry.level) {
         case 'debug': console.debug(...args); break;
         case 'info': console.log(...args); break;

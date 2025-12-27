@@ -51,7 +51,7 @@ export class SessionReplay {
   private isRecording = false;
   private eventBuffer: RecordedEvent[] = [];
   private maxBufferSize = 1000;
-  
+
   // Cleanup refs
   private originalFetch: typeof fetch | null = null;
   private originalConsole: { log: any; error: any; warn: any } | null = null;
@@ -383,7 +383,7 @@ export class SessionReplay {
         }
       });
     };
-    
+
     window.addEventListener("resize", resizeHandler);
     this.cleanupListeners.push(() => window.removeEventListener("resize", resizeHandler));
   }

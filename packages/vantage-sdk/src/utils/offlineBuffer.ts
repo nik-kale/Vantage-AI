@@ -85,7 +85,7 @@ export class OfflineBuffer {
         store.clear(); // Clear after reading
         resolve(events);
       };
-      
+
       request.onerror = () => reject(request.error);
     });
   }
@@ -106,7 +106,7 @@ export class OfflineBuffer {
       const tx = this.db.transaction(this.storeName, "readwrite");
       const store = tx.objectStore(this.storeName);
       const cursorReq = store.openCursor(); // Oldest first by default (keyPath autoIncrement)
-      
+
       cursorReq.onsuccess = (e) => {
         const cursor = (e.target as IDBRequest).result;
         if (cursor) {
@@ -122,14 +122,14 @@ export class OfflineBuffer {
   private async prune(): Promise<void> {
     if (!this.db) return;
     const cutoff = Date.now() - this.config.maxAge;
-    
+
     const tx = this.db.transaction(this.storeName, "readwrite");
     const store = tx.objectStore(this.storeName);
     const index = store.index("timestamp");
     const range = IDBKeyRange.upperBound(cutoff);
-    
+
     const req = index.openCursor(range);
-    
+
     req.onsuccess = (e) => {
         const cursor = (e.target as IDBRequest).result;
         if (cursor) {
