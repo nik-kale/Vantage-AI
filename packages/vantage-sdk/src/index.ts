@@ -1,4 +1,4 @@
-import type { VantageConfig, EventContext, Recommendation } from "./types";
+import type { VantageConfig, EventContext, Recommendation, VantagePlugin } from "./types";
 import { RageClickDetector } from "./detectors/rageClicks";
 import { DeadClickDetector } from "./detectors/deadClicks";
 import { ErrorCascadeDetector } from "./detectors/errorCascade";
@@ -39,6 +39,7 @@ export class Vantage {
   private domCollector: DomCollector;
   private errorCollector: ErrorCollector;
   private offlineBuffer: OfflineBuffer | null = null;
+  private plugins: VantagePlugin[] = [];
 
   // Lifecycle
   private isRunning = false;
@@ -71,6 +72,17 @@ export class Vantage {
       this.offlineBuffer = new OfflineBuffer(config.offline);
       this.offlineBuffer.init();
     }
+
+    if (config.plugins) {
+      this.plugins = config.plugins;
+      this.plugins.forEach(plugin => {
+        try {
+          if (plugin.onInit) plugin.onInit(this);
+        } catch (e) {
+          logger.error(`Plugin ${plugin.name} onInit failed`, e);
+        }
+      });
+    }
   }
 
   start() {
@@ -81,6 +93,15 @@ export class Vantage {
 
     if (this.isRunning) return;
     this.isRunning = true;
+
+    // Plugins onStart
+    this.plugins.forEach(plugin => {
+      try {
+        if (plugin.onStart) plugin.onStart(this);
+      } catch (e) {
+        logger.error(`Plugin ${plugin.name} onStart failed`, e);
+      }
+    });
 
     // Offline Handling
     if (this.offlineBuffer) {
@@ -152,6 +173,15 @@ export class Vantage {
   stop() {
     if (!this.isRunning) return;
 
+    // Plugins onStop
+    this.plugins.forEach(plugin => {
+      try {
+        if (plugin.onStop) plugin.onStop(this);
+      } catch (e) {
+        logger.error(`Plugin ${plugin.name} onStop failed`, e);
+      }
+    });
+
     // Remove all listeners
     this.listeners.forEach(({ target, type, handler, options }) => {
       target.removeEventListener(type, handler, options);
@@ -202,10 +232,24 @@ export class Vantage {
   }
 
   private processEvent(ctx: EventContext) {
-    if (this.offlineBuffer && !navigator.onLine) {
-        this.offlineBuffer.add(ctx);
+    let context = ctx;
+    
+    // Plugins onEvent
+    for (const plugin of this.plugins) {
+        try {
+            if (plugin.onEvent) {
+                const result = plugin.onEvent(context);
+                if (result) context = result;
+            }
+        } catch (e) {
+            logger.error(`Plugin ${plugin.name} onEvent failed`, e);
+        }
     }
-    this.suspicionEngine.addEvent(ctx);
+
+    if (this.offlineBuffer && !navigator.onLine) {
+        this.offlineBuffer.add(context);
+    }
+    this.suspicionEngine.addEvent(context);
   }
 
   private async flushOfflineEvents() {
@@ -367,8 +411,36 @@ export class Vantage {
   }
 
   private evaluateSignal(signal: any) {
-    const recommendation: Recommendation | null =
-      this.suspicionEngine.evaluate(signal);
+    let currentSignal = signal;
+    
+    // Plugins onSignal
+    for (const plugin of this.plugins) {
+        try {
+            if (plugin.onSignal) {
+                const result = plugin.onSignal(currentSignal);
+                if (result) currentSignal = result;
+            }
+        } catch (e) {
+            logger.error(`Plugin ${plugin.name} onSignal failed`, e);
+        }
+    }
+
+    let recommendation: Recommendation | null =
+      this.suspicionEngine.evaluate(currentSignal);
+
+    if (recommendation) {
+        // Plugins onRecommendation
+        for (const plugin of this.plugins) {
+            try {
+                if (plugin.onRecommendation) {
+                    const result = plugin.onRecommendation(recommendation);
+                    if (result) recommendation = result;
+                }
+            } catch (e) {
+                logger.error(`Plugin ${plugin.name} onRecommendation failed`, e);
+            }
+        }
+    }
 
     if (recommendation && this.config.onTrigger) {
       this.config.onTrigger(recommendation);

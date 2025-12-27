@@ -13,6 +13,18 @@ export interface VantageConfig {
     onFlush?: (events: EventContext[]) => void;
   };
   logger?: Partial<LoggerConfig>;
+  plugins?: VantagePlugin[];
+}
+
+export interface VantagePlugin {
+  name: string;
+  version?: string;
+  onInit?(vantage: any): void | Promise<void>;
+  onStart?(vantage: any): void;
+  onStop?(vantage: any): void;
+  onEvent?(event: EventContext): EventContext | void | null;
+  onSignal?(signal: SuspicionSignal): SuspicionSignal | void | null;
+  onRecommendation?(rec: Recommendation): Recommendation | void | null;
 }
 
 export interface EventContext {
